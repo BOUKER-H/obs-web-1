@@ -22,6 +22,7 @@
   
     onMount(async () => {
       if ('serviceWorker' in navigator) {
+        console.log("serviceWorker in navigator");
         navigator.serviceWorker.register('/service-worker.js');
       }
   
@@ -127,89 +128,21 @@
       }
     }
   
-    async function setScene(e) {
-      await sendCommand('SetCurrentScene', { 'scene-name': e.currentTarget.textContent });
-    }
-  
-    async function transitionScene(e) {
-      await sendCommand('TransitionToProgram');
-    }
-  
-    async function setPreview(e) {
-      await sendCommand('SetPreviewScene', { 'scene-name': e.currentTarget.textContent });
-    }
-  
-    async function updateScenes() {
-      let data = await sendCommand('GetSceneList');
-      currentScene = data.currentScene;
-      scenes = data.scenes.filter(i => {
-        return i.name.indexOf('(hidden)') === -1;
-      }); // Skip hidden scenes
-      if (isStudioMode) {
-        obs
-          .send('GetPreviewScene')
-          .then(data => (currentPreviewScene = data.name))
-          .catch(_ => {
-          });
-      }
-      sceneModerators = data.scenes.filter((scene) => {
-        return scene.name.indexOf('[Host]') != -1;
-      });
-  
-      sceneIntervenants = data.scenes.filter((scene) => {
-        return scene.name.indexOf('[Speaker]') != -1;
-      });
-  
-      scenePopulates = data.scenes.filter((scene) => {
-        return scene.name.indexOf('[V]') != -1;
-      });
-      
-      console.log('Scenes updated');
-    }
-  
-    async function getStudioMode() {
-      let data = await sendCommand('GetStudioModeStatus');
-      isStudioMode = (data && data.studioMode) || false;
-    }
-  
-    async function getScreenshot() {
-      if (connected) {
-        let data = await sendCommand('TakeSourceScreenshot', { sourceName: currentScene, embedPictureFormat: 'png', width: 480, height: 270 });
-        if (data && data.img) {
-          document.querySelector('#program').src = data.img;
-          document.querySelector('#program').className = '';
-        }
-  
-        if (isStudioMode) {
-          let data = await sendCommand('TakeSourceScreenshot', { sourceName: currentPreviewScene, embedPictureFormat: 'png', width: 480, height: 270 });
-          if (data && data.img) {
-            document.querySelector('#preview').src = data.img;
-            document.querySelector('#preview').classList.remove('is-hidden');
-          }
-        }
-      }
-      setTimeout(getScreenshot, 20);
-    }
-  
-    async function getScreenShotSourcesAdd() {
-      if (nameSourceActiveForScreenShot) {
-        let data = await sendCommand('TakeSourceScreenshot', { sourceName: nameSourceActiveForScreenShot, embedPictureFormat: 'png', width: 480, height: 270 });
-        if (data && data.img) {
-          if (document.querySelector('#SourcesAdd')) {
-            document.querySelector('#SourcesAdd').src = data.img;
-            document.querySelector('#SourcesAdd').classList.remove('is-hidden');
-          }
-        }
-      }
-      setTimeout(getScreenShotSourcesAdd, 20);
-    }
+
   
     async function connect() {
+      console.log(" function connect");
       host = host || 'localhost:4440';
-      let secure = location.protocol === 'https:' || host.endsWith(':443');
+      console.log("host");
+      console.log(host);
+      console.log("location");
+      console.log(location);
+      let secure = location.protocol === 'http:' || host.endsWith(':443');
+      console.log("secure");
+      console.log(secure);
       if (host.indexOf('://') !== -1) {
         let url = new URL(host);
-        secure = url.protocol === 'wss:' || url.protocol === 'https:';
+        secure = url.protocol === 'obsws:' || url.protocol === 'http:';
         host = url.hostname + ':' + (url.port ? url.port : secure ? 443 : 80);
       }
       console.log('Connecting to:', host, '- secure:', secure, '- using password:', password);
@@ -314,8 +247,8 @@
   <section class="section">
     <div class="container">
       {#if connected}
-          <SceneView isStudioMode={isStudioMode} transitionScene={transitionScene}/>
-          <SceneViewIntervenant />
+         <!--  <SceneView isStudioMode={isStudioMode} transitionScene={transitionScene}/> -->
+        <!--   <SceneViewIntervenant /> -->
   
   
       {:else}

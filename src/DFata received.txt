@@ -1,0 +1,3 @@
+Data received: {"d":{"obsWebSocketVersion":"5.0.0-d03a843-git","rpcVersion":1},"op":0}
+Data received: {"d":{"negotiatedRpcVersion":1},"op":2}
+Data received: {"d":{"requestId":"","requestStatus":{"code":100,"result":true},"requestType":"GetInputPropertiesListPropertyItems","responseData":{"propertyItems":[{"itemEnabled":true,"itemName":"DESKTOP-ALPHA (OBS (Test))","itemValue":"DESKTOP-ALPHA (OBS (Test))"},{"itemEnabled":true,"itemName":"DESKTOP-ALPHA (OBS Preview (Test))","itemValue":"DESKTOP-ALPHA (OBS Preview (Test))"}]}},"op":7}
